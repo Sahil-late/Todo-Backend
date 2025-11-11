@@ -5,7 +5,7 @@ import Todos from './models/todoStore.js'
 import mongoose from 'mongoose';
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT ;
 app.use(cors());            // Allow requests from frontend
 app.use(express.json());
 await mongoose.connect('mongodb://127.0.0.1:27017/loginData');
@@ -59,24 +59,6 @@ app.post('/add', async (req, res) => {
   const { username, todos } = req.body;
   if (!username || !todos) return
   let exist = await Todos.findOne({ username: username });
-  // let checkedTodos = await exist.todos
- 
- 
-  // let checkedTodo = ()=>{
-  //   for(let i=0;i<todos.length;i++){
-  //     for(let j=0;j<checkedTodos.length;j++){
-  //       if(todos[i].todo === checkedTodos[j].todo) {
-  //         return 'duplicate';
-  //       }
-  //     }
-  //   }
-  //   return 'unique';
-  // }
-  // console.log(checkedTodo());
-  
-  // if(checkedTodo() === 'duplicate') return res.json({message:'duplicate todo found'})
-
-  
   if (exist) {
     await Todos.updateOne({ username: username }, { $set: { todos: todos } });
     return res.json({ message: 'todo added successfully' ,todos});
