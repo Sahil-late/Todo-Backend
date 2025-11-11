@@ -3,6 +3,8 @@ import cors from 'cors';
 import Login from './models/login.js'
 import Todos from './models/todoStore.js'
 import mongoose from 'mongoose';
+import { configDotenv } from 'dotenv';
+
 
 const app = express();
 const port = process.env.PORT ;
