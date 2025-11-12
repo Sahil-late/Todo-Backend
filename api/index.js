@@ -127,11 +127,8 @@ app.post('/changePassword',async(req,res)=>{
   return  res.json({message:"Password changed successfully"});
 })
 
-// local dev only
-// if (process.env.NODE_ENV !== "production") {
-//   app.listen(port, () => console.log(`🚀 Server running on port ${port}`));
-// }
 
-// for vercel
-
-export const handler = serverless(app);
+app.listen(port,(req,res)=>{
+  console.log(`listen on port ${port}`);
+})
+// export const handler = serverless(app);
