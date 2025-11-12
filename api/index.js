@@ -12,18 +12,18 @@ import serverless from 'serverless-http';
 const app = express();
 const port = process.env.PORT || 3000;
 const mongoURI = process.env.MONGO_URI;
-console.log("Loaded Mongo URI:", process.env.ATLAS_URL || process.env.MONGO_URI);
+console.log("Loaded Mongo URI:", process.env.MONGO_URI);
 
 console.log(port);
 
 
-app.use(cors());          
+app.use(cors());
 app.use(express.json());
 
 let isConnected = false;
 async function connectDB() {
   if (isConnected) return;
-await mongoose.connect(mongoURI);
+  await mongoose.connect(mongoURI);
   isConnected = true;
   console.log('✅ MongoDB connected');
 }
@@ -85,52 +85,52 @@ app.post('/add', async (req, res) => {
   let exist = await Todos.findOne({ username: username });
   if (exist) {
     await Todos.updateOne({ username: username }, { $set: { todos: todos } });
-    return res.json({ message: 'todo added successfully' ,todos});
+    return res.json({ message: 'todo added successfully', todos });
   }
 
   const newTodo = new Todos({ username: username, todos: todos });
   await newTodo.save();
-  return res.json({ message: 'todo added successfully', todos});
+  return res.json({ message: 'todo added successfully', todos });
 
 })
 
-app.post('/todos',async(req,res)=>{
+app.post('/todos', async (req, res) => {
   await connectDB();
-  const {username} = req.body;
-  let exists = await Todos.findOne({username:username})
-  if(!exists) return
-  Todos.findOne({username:username}).then((data)=>{
-    res.json({todos:data.todos})
+  const { username } = req.body;
+  let exists = await Todos.findOne({ username: username })
+  if (!exists) return
+  Todos.findOne({ username: username }).then((data) => {
+    res.json({ todos: data.todos })
   })
 })
 
-app.post('/checked',async(req,res)=>{
+app.post('/checked', async (req, res) => {
   await connectDB();
-let {username,todos} = req.body;
-let exist = await Todos.findOne({ username: username });
+  let { username, todos } = req.body;
+  let exist = await Todos.findOne({ username: username });
   if (exist) {
     await Todos.updateOne({ username: username }, { $set: { todos: todos } });
-    return res.json({ message: 'todo completed' ,todos});
+    return res.json({ message: 'todo completed', todos });
   }
 })
 
-app.post('/delete',async(req,res)=>{
+app.post('/delete', async (req, res) => {
   await connectDB();
-let {checkId,newTodos,username} = req.body;
-let exist = await Todos.findOne({username:username});
+  let { checkId, newTodos, username } = req.body;
+  let exist = await Todos.findOne({ username: username });
   if (exist) {
     await Todos.updateOne({ username: username }, { $set: { todos: newTodos } });
-    return res.json({ message: 'todo deleted' ,newTodos,checkId});
+    return res.json({ message: 'todo deleted', newTodos, checkId });
   }
 })
 
-app.post('/changePassword',async(req,res)=>{
+app.post('/changePassword', async (req, res) => {
   await connectDB();
-  const {email,newPassword} = req.body;
-  const exists = await Login.findOne({email:email});
-  if(!exists) return res.status(400).json({error:"User does not exist"});
-  await Login.updateOne({email:email},{$set:{password:newPassword}});
-  return  res.json({message:"Password changed successfully"});
+  const { email, newPassword } = req.body;
+  const exists = await Login.findOne({ email: email });
+  if (!exists) return res.status(400).json({ error: "User does not exist" });
+  await Login.updateOne({ email: email }, { $set: { password: newPassword } });
+  return res.json({ message: "Password changed successfully" });
 })
 
 
