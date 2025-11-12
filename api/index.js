@@ -5,7 +5,6 @@ import Todos from './models/todoStore.js'
 import mongoose from 'mongoose';
 import dotenv from 'dotenv'
 dotenv.config();
-//dotenv.config({ path: '../.env' });
 import serverless from 'serverless-http';
 
 
