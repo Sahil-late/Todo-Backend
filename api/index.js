@@ -128,7 +128,5 @@ app.post('/changePassword',async(req,res)=>{
 })
 
 
-app.listen(port,(req,res)=>{
-  console.log(`listen on port ${port}`);
-})
-// export const handler = serverless(app);
+
+export const handler = serverless(app);
