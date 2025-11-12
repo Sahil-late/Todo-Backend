@@ -4,13 +4,14 @@ import Login from './models/login.js'
 import Todos from './models/todoStore.js'
 import mongoose from 'mongoose';
 import dotenv from 'dotenv'
-dotenv.config({ path: '../.env' });
+dotenv.config();
+//dotenv.config({ path: '../.env' });
 import serverless from 'serverless-http';
 
 
 const app = express();
 const port = process.env.PORT || 3000;
-const mongoURI = process.env.ATLAS_URL || process.env.MONGO_URI;
+const mongoURI = process.env.MONGO_URI;
 console.log("Loaded Mongo URI:", process.env.ATLAS_URL || process.env.MONGO_URI);
 
 console.log(port);
@@ -26,6 +27,11 @@ await mongoose.connect(mongoURI);
   isConnected = true;
   console.log('✅ MongoDB connected');
 }
+
+app.get('/', (req, res) => {
+  res.send('Backend working fine ✅');
+});
+
 
 app.post('/signIn', async (req, res) => {
   await connectDB();
@@ -129,4 +135,11 @@ app.post('/changePassword',async(req,res)=>{
 
 
 
+// ✅ Local mode only
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, () => console.log(`🚀 Server running locally on port ${port}`));
+}
+
+// ✅ Required for Vercel
 export const handler = serverless(app);
+
