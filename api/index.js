@@ -5,7 +5,6 @@ import Todos from './models/todoStore.js'
 import mongoose from 'mongoose';
 import dotenv from 'dotenv'
 dotenv.config();
-import serverless from 'serverless-http';
 
 
 const app = express();
@@ -134,11 +133,7 @@ app.post('/changePassword', async (req, res) => {
 
 
 
-// ✅ Local mode only
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(port, () => console.log(`🚀 Server running locally on port ${port}`));
-}
 
-// ✅ Required for Vercel
-export const handler = serverless(app);
+
+app.listen(port, () => console.log(`🚀 Server running locally on port ${port}`));
 
